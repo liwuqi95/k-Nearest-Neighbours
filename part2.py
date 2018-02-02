@@ -43,12 +43,13 @@ X = np.linspace(0.0,11.0,num=1000)[:,np.newaxis]
 
 for k in kv:
 
+	trainMSE  = MSE(predict( trainData,trainData,trainTarget,k),trainTarget)
 	validMSE = MSE(predict( validData,trainData,trainTarget,k),validTarget)
 	testMSE  = MSE(predict( testData,trainData,trainTarget,k),testTarget)
 
 	result = predict(X, trainData, trainTarget, k)
 
-	print('With k = ' + str(k) + "   validMSE = " + str(sess.run(validMSE))+"   testMSE = " + str(sess.run(testMSE)))
+	print('With k = ' + str(k) + "   trainMSE = " + str(sess.run(trainMSE)) + "   validMSE = " + str(sess.run(validMSE))+"   testMSE = " + str(sess.run(testMSE)))
 
 
 	plt.figure(k)

@@ -44,7 +44,7 @@ def getMajor(r, trainTarget):
 	y, idx, count = tf.unique_with_counts(votes)
 	return y[tf.argmax(count)]
 
-def MSE(predY, newY):
+def accuracy(predY, newY):
 	return tf.reduce_mean(tf.cast(tf.equal(predY,newY),tf.float64))
 
 
@@ -68,12 +68,30 @@ def display(data):
 
 kv = [1,5,10,25,50,100,200]
 
+validAC_list = []
+
 # find the k that highest accuracy with validation test
 for k in kv:
 
-	validMSE = MSE(predictMV(testData,trainData,trainTarget,k),testTarget)
+    # get the validation accuracy
+	validAC = accuracy(predictMV(validData,trainData,trainTarget,k),validTarget)
 
-	print('With k = ' + str(k) + "   validMSE = " + str(sess.run(validMSE)))
+	validAC_list.append(sess.run(validAC))
+
+	print('With k = ' + str(k) + "   valid accuracy = " + str(sess.run(validAC)))
+
+
+
+bestK = kv[np.argmax(validAC_list)]
+
+print('The best k (with highest accuracy is) ' + str(bestK))
+
+
+
+testAC = accuracy(predictMV(testData,trainData,trainTarget,bestK),testTarget)
+
+print('The best k running testData get accuracy = ' + str(sess.run(testAC)))
+
 
 
 k = 10
